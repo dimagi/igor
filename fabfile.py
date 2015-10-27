@@ -16,9 +16,7 @@ def pack():
 def update_code():
     with cd(env.code_root):
         sudo('git remote prune origin')
-        sudo('git fetch origin master')
-        sudo('git checkout master')
-        sudo('git reset --hard origin/master')
+        sudo('git pull origin master')
         sudo("git clean -ffd")
 
 
