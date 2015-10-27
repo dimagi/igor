@@ -8,6 +8,5 @@
   "hubot-redis-brain",
   "hubot-rules",
   "hubot-trello",
-  "hubot-shipit",
-  "hubot-motivate"
+  "hubot-shipit"
 ]
