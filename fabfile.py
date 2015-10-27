@@ -20,6 +20,11 @@ def update_code():
         sudo("git clean -ffd")
 
 
+def install_deps():
+    with cd(env.code_root):
+        sudo('npm install')
+
+
 @task
 def restart_services():
     sudo('supervisorctl restart mia', user='root')
