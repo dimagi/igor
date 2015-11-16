@@ -74,7 +74,7 @@ findCommit = (sha, env, callback) ->
   cchqPath = config.get 'CommCareHQ.path'
 
   exec "git tag --contains #{sha}", { cwd: cchqPath }, (err, stdout, stderr) ->
-    lines = stdout.split('\n').reverse()
+    lines = stdout.split('\n')
     tag = _.find lines, (line) -> line.indexOf(env) != -1
 
     callback err, tag
