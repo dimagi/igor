@@ -16,7 +16,7 @@
 #
 config = require('config')
 exec = require('child_process').exec
-moment = require('moment');
+moment = require('moment')
 _ = require('lodash')
 
 module.exports = (robot) ->
