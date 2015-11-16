@@ -1,0 +1,5 @@
+{
+  "CommCareHQ": {
+    "path": "/var/lib/mia/commcare-hq"
+  }
+}
