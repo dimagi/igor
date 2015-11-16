@@ -8,21 +8,16 @@ env.hosts = ['162.242.212.212']
 env.code_root = '/var/lib/mia/mia'
 
 
-def pack():
-    # create a new source distribution as tarball
-    local('python setup.py sdist --formats=gztar', capture=False)
-
-
 def update_code():
     with cd(env.code_root):
-        sudo('git remote prune origin')
-        sudo('git pull origin master')
-        sudo("git clean -ffd")
+        run('git remote prune origin')
+        run('git pull origin master')
+        run("git clean -ffd")
 
 
 def install_deps():
     with cd(env.code_root):
-        sudo('npm install')
+        run('npm install')
 
 
 @task
