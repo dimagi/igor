@@ -32,7 +32,7 @@ module.exports = (robot) ->
     foundCallback = (err, tag) ->
       if err and err.toString().indexOf('no such commit') == -1
         # Unexpected error
-        res.send err
+        res.send err.toString()
       else if err
         # Could not find it
         res.send "Sorry hun, I couldn't find #{sha} on #{env} for ya"
