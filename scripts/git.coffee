@@ -1,3 +1,19 @@
+# Description
+#   Runs CommCareHQ git utilties
+#
+# Dependencies:
+#
+# Configuration:
+#   NODE_ENV=(local|production)
+#
+# Commands:
+#   hubot <commit> exists on <env> - Tells you if that commit exists on that environment
+#
+# Notes:
+#
+# Author:
+#   benrudolph
+#
 config = require('config')
 exec = require('child_process').exec
 moment = require('moment');
