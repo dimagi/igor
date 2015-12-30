@@ -17,7 +17,9 @@
     "hubot-shipit": "^0.2.0",
     "hubot-slack": "^3.3.0",
     "lodash": "^3.10.1",
-    "moment": "^2.10.6"
+    "moment": "^2.10.6",
+    "request": "^2.67.0",
+    "xml2js": "^0.4.15"
   },
   "engines": {
     "node": "0.10.x"

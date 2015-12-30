@@ -1,6 +1,9 @@
 {
   "CommCareHQ": {
     "path": "/path/to/local/hq"
+  },
+  "FogBugz": {
+    "key": "api-key"
   }
 }
 
