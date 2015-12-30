@@ -7,7 +7,7 @@
 #   NODE_ENV=(local|production)
 #
 # Commands:
-#   hubot fb interrupt
+#   hubot fb interrupt - Lists all tickets assigned to interrupt
 #
 # Notes:
 #
