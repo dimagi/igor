@@ -23,6 +23,12 @@ interruptFilter = 570
 neglectedFilter = 525
 
 module.exports = (robot) ->
+  robot.respond /fb filter ([0-9]+)/i, (res) ->
+    filterId = res.match[1]
+    fbCasesByFilter filterId, (response)->
+      out = formatCaseXML response
+      res.send out
+
   robot.respond /fb neglected/i, (res) ->
     fbCasesByFilter neglectedFilter, (response)->
       out = formatCaseXML response
