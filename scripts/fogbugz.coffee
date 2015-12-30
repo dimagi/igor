@@ -20,17 +20,32 @@ request = require('request')
 parseString = require('xml2js').parseString
 fbUrl = 'http://manage.dimagi.com'
 interruptFilter = 570
+neglectedFilter = 525
 
 module.exports = (robot) ->
+  robot.respond /fb neglected/i, (res) ->
+    fbCasesByFilter neglectedFilter, (response)->
+      out = formatCaseXML response
+      res.send out
 
   robot.respond /fb interrupt/i, (res) ->
+    fbCasesByFilter interruptFilter, (response)->
+      out = formatCaseXML response
+      res.send out
+
+fbBaseUrl = ->
+  apiKey = config.get 'FogBugz.key'
+
+  "#{fbUrl}/api.asp?token=#{apiKey}"
+
+fbCasesByFilter = (filterId, callback) ->
     request
       .get(
         {
           url: fbBaseUrl(),
           qs: {
             cmd: 'setCurrentFilter'
-            sFilter: 'interruptFilter'
+            sFilter: filterId
           }
         }, (err, response, body) ->
           if err
@@ -47,19 +62,15 @@ module.exports = (robot) ->
                 }
               }, (err, response, body) ->
                 parseString body, (err, result) ->
-                  cases = result.response.cases[0].case
-                  out = ''
-                  _.each cases, (c) ->
-                    # HTML links are broken, so need to use raw link
-                    # https://github.com/slackhq/hubot-slack/issues/114
-                    out += "#{fbUrl}/default.asp?#{c['$'].ixBug}: #{c.sPersonAssignedTo}\n"
-
-                  res.send out
+                  callback result.response
             )
       )
 
-
-fbBaseUrl = ->
-  apiKey = config.get 'FogBugz.key'
-
-  "#{fbUrl}/api.asp?token=#{apiKey}"
+formatCaseXML = (xmlResponse) ->
+    cases = xmlResponse.cases[0].case
+    out = ''
+    _.each cases, (c) ->
+      # HTML links are broken, so need to use raw link
+      # https://github.com/slackhq/hubot-slack/issues/114
+      out += "#{fbUrl}/default.asp?#{c['$'].ixBug}: #{c.sPersonAssignedTo}\n"
+    out
