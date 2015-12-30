@@ -7,7 +7,10 @@
 #   NODE_ENV=(local|production)
 #
 # Commands:
-#   hubot fb interrupt - Lists all tickets assigned to interrupt
+#   hubot fb interrupt - Lists unassigned tickets that are interrupt
+#   hubot fb interrupt all - Lists all tickets assigned to interrupt
+#   hubot fb neglected - Lists all neglected tickets
+#   hubot fb filter <filterId> - Lists cases for that filter id
 #
 # Notes:
 #
@@ -35,6 +38,12 @@ module.exports = (robot) ->
       res.send out
 
   robot.respond /fb interrupt/i, (res) ->
+    fbCasesByFilter interruptFilter, (response)->
+      out = formatCaseXML response, (c) ->
+        c.sPersonAssignedTo[0].toLowerCase() == 'CommCare HQ Interrupt Team'.toLowerCase()
+      res.send out
+
+  robot.respond /fb interrupt all/i, (res) ->
     fbCasesByFilter interruptFilter, (response)->
       out = formatCaseXML response
       res.send out
@@ -72,8 +81,10 @@ fbCasesByFilter = (filterId, callback) ->
             )
       )
 
-formatCaseXML = (xmlResponse) ->
+formatCaseXML = (xmlResponse, filterFn) ->
     cases = xmlResponse.cases[0].case
+    if filterFn?
+      cases = _.filter cases, filterFn
     out = ''
     _.each cases, (c) ->
       # HTML links are broken, so need to use raw link
