@@ -12,4 +12,3 @@ module.exports = (robot) ->
 
   robot.respond /whostheman/i, (res) ->
     res.send "Ben! Ben! You're the man! If you can't do it no one can!"
-
