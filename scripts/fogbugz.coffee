@@ -21,9 +21,14 @@ config = require('config')
 _ = require('lodash')
 request = require('request')
 parseString = require('xml2js').parseString
+
+# Fogbugz constants
 fbUrl = 'http://manage.dimagi.com'
 interruptFilter = 570
 neglectedFilter = 525
+FL_SUPPORT_USER_ID = 103
+SUPPORT_AREA_ID = 1269
+COMMCAREHQ_PROJECT_ID = 25
 
 module.exports = (robot) ->
   robot.respond /fb filter ([0-9]+)/i, (res) ->
@@ -60,10 +65,37 @@ module.exports = (robot) ->
       else
           res.send 'Nice work interrupt! No cases!'
 
+  robot.respond /fb new (.+)/i, (res) ->
+    title = res.match[1]
+    fbCreateCase title, (response) ->
+      bugId = response.case[0].ixBug[0]
+
+      res.send "Game, set, match: #{fbUrl}/default.asp?#{bugId}. Thanks for making CommCareHQ great again."
+
+
 fbBaseUrl = ->
   apiKey = config.get 'FogBugz.key'
 
   "#{fbUrl}/api.asp?token=#{apiKey}"
+
+fbCreateCase = (title, callback) ->
+  request
+    .get(
+      {
+        url: fbBaseUrl()
+        qs: {
+          cmd: 'new'
+          sTitle: title
+          ixPersonAssignedTo: FL_SUPPORT_USER_ID
+          ixPriority: 4
+          ixProject: COMMCAREHQ_PROJECT_ID
+          ixArea: SUPPORT_AREA_ID
+          cols: 'ixBug'
+        }
+      }, (err, response, body) ->
+        parseString body, (err, result) ->
+          callback result.response
+    )
 
 fbCasesByFilter = (filterId, callback) ->
     request
