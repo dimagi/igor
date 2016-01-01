@@ -11,6 +11,7 @@
 #   hubot fb interrupt all - Lists all tickets assigned to interrupt
 #   hubot fb neglected - Lists all neglected tickets
 #   hubot fb filter <filterId> - Lists cases for that filter id
+#   hubot fb new <title> - Create a new fogbugz support ticket
 #
 # Notes:
 #
