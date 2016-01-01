@@ -23,9 +23,9 @@ request = require('request')
 parseString = require('xml2js').parseString
 
 # Fogbugz constants
-fbUrl = 'http://manage.dimagi.com'
-interruptFilter = 570
-neglectedFilter = 525
+FB_URL = 'http://manage.dimagi.com'
+INTERRUPT_FILTER_ID = 570
+NEGLECTED_FILTER_ID = 525
 FL_SUPPORT_USER_ID = 103
 SUPPORT_AREA_ID = 1269
 COMMCAREHQ_PROJECT_ID = 25
@@ -41,7 +41,7 @@ module.exports = (robot) ->
           res.send 'Nothin found.'
 
   robot.respond /fb neglected/i, (res) ->
-    fbCasesByFilter neglectedFilter, (response)->
+    fbCasesByFilter NEGLECTED_FILTER_ID, (response)->
       out = formatCaseXML response
       if out?
           res.send out
@@ -49,7 +49,7 @@ module.exports = (robot) ->
           res.send 'Good job! No neglected cases.'
 
   robot.respond /fb interrupt/i, (res) ->
-    fbCasesByFilter interruptFilter, (response)->
+    fbCasesByFilter INTERRUPT_FILTER_ID, (response)->
       out = formatCaseXML response, (c) ->
         c.sPersonAssignedTo[0].toLowerCase() == 'CommCare HQ Interrupt Team'.toLowerCase()
       if out?
@@ -58,7 +58,7 @@ module.exports = (robot) ->
           res.send 'Nice work interrupt! No unassigned cases.'
 
   robot.respond /fb interrupt all/i, (res) ->
-    fbCasesByFilter interruptFilter, (response)->
+    fbCasesByFilter INTERRUPT_FILTER_ID, (response)->
       out = formatCaseXML response
       if out?
           res.send out
@@ -70,13 +70,13 @@ module.exports = (robot) ->
     fbCreateCase title, (response) ->
       bugId = response.case[0].ixBug[0]
 
-      res.send "Game, set, match: #{fbUrl}/default.asp?#{bugId}. Thanks for making CommCareHQ great again."
+      res.send "Game, set, match: #{FB_URL}/default.asp?#{bugId}. Thanks for making CommCareHQ great again."
 
 
 fbBaseUrl = ->
   apiKey = config.get 'FogBugz.key'
 
-  "#{fbUrl}/api.asp?token=#{apiKey}"
+  "#{FB_URL}/api.asp?token=#{apiKey}"
 
 fbCreateCase = (title, callback) ->
   request
@@ -133,5 +133,5 @@ formatCaseXML = (xmlResponse, filterFn) ->
     _.each cases, (c) ->
       # HTML links are broken, so need to use raw link
       # https://github.com/slackhq/hubot-slack/issues/114
-      out += "#{fbUrl}/default.asp?#{c['$'].ixBug}: #{c.sPersonAssignedTo}\n"
+      out += "#{FB_URL}/default.asp?#{c['$'].ixBug}: #{c.sPersonAssignedTo}\n"
     out
