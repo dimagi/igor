@@ -30,23 +30,35 @@ module.exports = (robot) ->
     filterId = res.match[1]
     fbCasesByFilter filterId, (response)->
       out = formatCaseXML response
-      res.send out
+      if out?
+          res.send out
+      else
+          res.send 'Nothin found.'
 
   robot.respond /fb neglected/i, (res) ->
     fbCasesByFilter neglectedFilter, (response)->
       out = formatCaseXML response
-      res.send out
+      if out?
+          res.send out
+      else
+          res.send 'Good job! No neglected cases.'
 
   robot.respond /fb interrupt/i, (res) ->
     fbCasesByFilter interruptFilter, (response)->
       out = formatCaseXML response, (c) ->
         c.sPersonAssignedTo[0].toLowerCase() == 'CommCare HQ Interrupt Team'.toLowerCase()
-      res.send out
+      if out?
+          res.send out
+      else
+          res.send 'Nice work interrupt! No unassigned cases.'
 
   robot.respond /fb interrupt all/i, (res) ->
     fbCasesByFilter interruptFilter, (response)->
       out = formatCaseXML response
-      res.send out
+      if out?
+          res.send out
+      else
+          res.send 'Nice work interrupt! No cases!'
 
 fbBaseUrl = ->
   apiKey = config.get 'FogBugz.key'
