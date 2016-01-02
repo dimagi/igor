@@ -134,5 +134,7 @@ formatCaseXML = (xmlResponse, filterFn) ->
     _.each cases, (c) ->
       # HTML links are broken, so need to use raw link
       # https://github.com/slackhq/hubot-slack/issues/114
-      out += "#{FB_URL}/default.asp?#{c['$'].ixBug}: #{c.sPersonAssignedTo}\n"
+      maxChars = 40
+      title = if c.sTitle[0].length < maxChars then c.sTitle[0] else "#{c.sTitle[0].slice(0, maxChars)}..."
+      out += "#{FB_URL}/default.asp?#{c['$'].ixBug}: #{title}\n"
     out
