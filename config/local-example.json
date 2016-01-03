@@ -4,6 +4,9 @@
   },
   "FogBugz": {
     "key": "api-key"
+  },
+  "Bookmarks": {
+    "path": "/path/to/file/storage"
   }
 }
 
