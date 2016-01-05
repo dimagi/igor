@@ -23,6 +23,7 @@ def install_deps():
 @task
 def restart_services():
     sudo('supervisorctl restart mia', user='root')
+    sudo('supervisorctl restart mia-dimagi-all', user='root')
 
 
 @task
