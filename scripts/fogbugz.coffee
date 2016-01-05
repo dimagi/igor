@@ -118,7 +118,7 @@ fbCasesByFilter = (filterId, callback) ->
                 url: fbBaseUrl()
                 qs: {
                   cmd: 'search'
-                  cols: 'sTitle,sPersonAssignedTo'
+                  cols: 'sTitle,sPersonAssignedTo,ixPriority'
                 }
               }, (err, response, body) ->
                 parseString body, (err, result) ->
@@ -136,5 +136,5 @@ formatCaseXML = (xmlResponse, filterFn) ->
       # https://github.com/slackhq/hubot-slack/issues/114
       maxChars = 40
       title = if c.sTitle[0].length < maxChars then c.sTitle[0] else "#{c.sTitle[0].slice(0, maxChars)}..."
-      out += "#{FB_URL}/default.asp?#{c['$'].ixBug}: #{title}\n"
+      out += "#{c.ixPriority} #{FB_URL}/default.asp?#{c['$'].ixBug}: #{title}\n"
     out
