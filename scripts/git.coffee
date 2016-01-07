@@ -38,10 +38,11 @@ module.exports = (robot) ->
         res.send "Sorry hun, I couldn't find #{sha} on #{env} for ya"
       else
         # Success
-        date = extractDateFromTag tag
 
         res.send "#{sha} certainly exists on #{env}"
-        res.send "In fact it was deployed #{moment(date).fromNow()} on #{moment(date).format("dddd, MMMM Do YYYY, h:mm:ss a")}"
+        if tag
+          date = extractDateFromTag tag
+          res.send "In fact it was deployed #{moment(date).fromNow()} on #{moment(date).format("dddd, MMMM Do YYYY, h:mm:ss a")}"
 
     callback = (err, tag) ->
       if err and not refreshedRepo
