@@ -49,7 +49,6 @@ module.exports = (robot) ->
 
     # Ensure we do not include params in query
     query = query.replace "/<[^ ]>/", ''
-    console.log query
 
     query =
       bool:
