@@ -85,7 +85,7 @@ module.exports = (robot) ->
         out = ''
         _.each resp.hits.hits, (hit) ->
           date = new Date hit._source.date
-          formattedDate = moment(date).format('MMM D YY, h:mm:ss a')
+          formattedDate = moment(date).format('MMM D YYYY, h:mm:ss a')
           room = hit._source.room
 
           out += "[##{room}][#{formattedDate}] #{hit._source.user}: #{hit.highlight.message[0]}\n"
