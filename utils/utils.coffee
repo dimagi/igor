@@ -1,8 +1,5 @@
 _ = require 'lodash'
 
-USER_PARAM = 'user'
-ROOM_PARAM = 'room'
-
 extractParam = (param, query) ->
   result = _.filter(query.split(' '), (word) -> _.startsWith(word, "#{param}="))
 
@@ -12,11 +9,18 @@ extractParam = (param, query) ->
 
   extracted
 
-exports.extractUser = (query) ->
-  extractParam 'user', query
+exports.extractMentions = (text) ->
+  mentions = _.filter(text.split(' '), (word) -> _.startsWith(word, "<") and _.endsWith(word, ">"))
 
-exports.extractRoom = (query) ->
-  extractParam 'room', query
+  results = {
+    channels: []
+    users: []
+  }
+  _.each mentions, (mention) ->
+    stripped = _.trim mention, '<>'
+    if _.startsWith stripped, '#'
+      results.channels.push stripped.slice(1)
+    else if _.startsWith stripped, '@'
+      results.users.push stripped.slice(1)
 
-exports.USER_PARAM = USER_PARAM
-exports.ROOM_PARAM = ROOM_PARAM
+  results

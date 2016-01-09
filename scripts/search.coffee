@@ -35,6 +35,8 @@ module.exports = (robot) ->
           message: res.message.text
           user: res.message.user.name
           room: res.message.room
+          channelId: res.message.rawMessage.channel
+          userId: res.message.user.id
           date: new Date()
         , (err, resp) ->
           if err
@@ -42,14 +44,12 @@ module.exports = (robot) ->
 
   robot.respond /search (all )?(.+)/i, (res) ->
     query = res.match[2]
+    mentions = utils.extractMentions res.message.rawText
     allRooms = res.match[1]?
 
-    user = utils.extractUser query
-    room = utils.extractRoom(query) || res.message.room
-
     # Ensure we do not include params in query
-    query = query.replace "#{utils.USER_PARAM}=#{user}", ''
-    query = query.replace "#{utils.ROOM_PARAM}=#{room}", ''
+    query = query.replace "/<[^ ]>/", ''
+    console.log query
 
     query =
       bool:
@@ -58,11 +58,15 @@ module.exports = (robot) ->
         ]
 
     if not allRooms
-      room = room.replace '#', ''  # In case using # for rooms
-      query.bool.must.push { match: { room: room } }
-    if user
-      user = user.replace '@', ''  # In case using @ mention
-      query.bool.must.push { match: { user: user } }
+      if mentions.channels.length
+        query.bool.must.push { match: { channelId: mentions.channels.join(' ') } }
+      else
+        query.bool.must.push { match: { channelId: res.message.rawMessage.channel } }
+
+    if mentions.users.length
+      query.bool.must.push { match: { userId: mentions.users.join(' ') } }
+    else
+      query.bool.must.push { match: { userId: res.message.user.id } }
 
     client.search
       index: INDEX
