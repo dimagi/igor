@@ -7,7 +7,7 @@
 #   NODE_ENV=(local|production)
 #
 # Commands:
-#   hubot search <query> - searches for a message
+#   hubot search <all> <user=[username]> <room=[room]> <query> - searches for a message
 #
 # Notes:
 #
@@ -16,6 +16,8 @@
 
 elasticsearch = require 'elasticsearch'
 _ = require 'lodash'
+moment = require 'moment'
+utils = require '../utils/utils'
 
 INDEX = 'slack_messages'
 MESSAGE_TYPE = 'message'
@@ -38,16 +40,29 @@ module.exports = (robot) ->
           if err
             res.send err
 
-  robot.respond /search (.*)/i, (res) ->
-    query = res.match[1]
+  robot.respond /search (all )?(.+)/i, (res) ->
+    query = res.match[2]
+    allRooms = res.match[1]?
+
+    user = utils.extractUser query
+    room = utils.extractRoom(query) || res.message.room
+
+    query =
+      bool:
+        must: [
+          { match: { message: query } }
+        ]
+
+    if not allRooms
+      query.bool.must.push { match: { room: room } }
+    if user
+      query.bool.must.push { match: { user: user } }
 
     client.search
       index: INDEX
       type: MESSAGE_TYPE
       body:
-        query:
-          match:
-            message: query
+        query: query
         highlight:
           pre_tags: ['*']
           post_tags: ['*']
@@ -60,5 +75,11 @@ module.exports = (robot) ->
 
         out = ''
         _.each resp.hits.hits, (hit) ->
-          out += hit.highlight.message[0] + '\n'
+          date = new Date hit._source.date
+          formattedDate = moment(date).fromNow()
+
+          out += "[#{formattedDate}] #{hit._source.user}: #{hit.highlight.message[0]}\n"
+
+        if not out
+          out = 'Found nothing!'
         res.send out
