@@ -7,7 +7,7 @@
 #   NODE_ENV=(local|production)
 #
 # Commands:
-#   hubot search <all> <user=[username]> <room=[room]> <query> - searches for a message
+#   hubot search <all> <@mention> <#room> <query> - searches for a message
 #
 # Notes:
 #
