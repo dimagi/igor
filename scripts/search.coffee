@@ -83,8 +83,9 @@ module.exports = (robot) ->
         _.each resp.hits.hits, (hit) ->
           date = new Date hit._source.date
           formattedDate = moment(date).fromNow()
+          room = hit._source.room
 
-          out += "[#{formattedDate}] #{hit._source.user}: #{hit.highlight.message[0]}\n"
+          out += "[##{room}][#{formattedDate}] #{hit._source.user}: #{hit.highlight.message[0]}\n"
 
         if not out
           out = 'Found nothing!'
