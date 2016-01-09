@@ -47,6 +47,9 @@ module.exports = (robot) ->
     user = utils.extractUser query
     room = utils.extractRoom(query) || res.message.room
 
+    user = user.replace '@', ''  # In case using @ mention
+    room = room.replace '#', ''  # In case using # for rooms
+
     # Ensure we do not include params in query
     query = query.replace "#{utils.USER_PARAM}=#{user}", ''
     query = query.replace "#{utils.ROOM_PARAM}=#{room}", ''
