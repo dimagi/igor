@@ -47,9 +47,6 @@ module.exports = (robot) ->
     user = utils.extractUser query
     room = utils.extractRoom(query) || res.message.room
 
-    user = user.replace '@', ''  # In case using @ mention
-    room = room.replace '#', ''  # In case using # for rooms
-
     # Ensure we do not include params in query
     query = query.replace "#{utils.USER_PARAM}=#{user}", ''
     query = query.replace "#{utils.ROOM_PARAM}=#{room}", ''
@@ -61,8 +58,10 @@ module.exports = (robot) ->
         ]
 
     if not allRooms
+      room = room.replace '#', ''  # In case using # for rooms
       query.bool.must.push { match: { room: room } }
     if user
+      user = user.replace '@', ''  # In case using @ mention
       query.bool.must.push { match: { user: user } }
 
     client.search
