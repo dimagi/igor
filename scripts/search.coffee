@@ -36,8 +36,7 @@ module.exports = (robot) ->
           date: new Date()
         , (err, resp) ->
           if err
-            console.log err
-          console.log resp
+            res.send err
 
   robot.respond /search (.*)/i, (res) ->
     query = res.match[1]
