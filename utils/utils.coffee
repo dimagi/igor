@@ -1,7 +1,7 @@
 _ = require 'lodash'
 
 extractParam = (param, query) ->
-  result = _.filter(query.split(' '), (word) -> word.startsWith("#{param}="))
+  result = _.filter(query.split(' '), (word) -> _.startsWith(word, "#{param}="))
 
   extracted = null
   if result.length >= 1
