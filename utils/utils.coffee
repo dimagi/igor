@@ -1,5 +1,8 @@
 _ = require 'lodash'
 
+USER_PARAM = 'user'
+ROOM_PARAM = 'room'
+
 extractParam = (param, query) ->
   result = _.filter(query.split(' '), (word) -> _.startsWith(word, "#{param}="))
 
@@ -14,3 +17,6 @@ exports.extractUser = (query) ->
 
 exports.extractRoom = (query) ->
   extractParam 'room', query
+
+exports.USER_PARAM = USER_PARAM
+exports.ROOM_PARAM = ROOM_PARAM

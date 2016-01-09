@@ -47,6 +47,10 @@ module.exports = (robot) ->
     user = utils.extractUser query
     room = utils.extractRoom(query) || res.message.room
 
+    # Ensure we do not include params in query
+    query.replace "#{utils.USER_PARAM}=#{user}", ''
+    query.replace "#{utils.ROOM_PARAM}=#{room}", ''
+
     query =
       bool:
         must: [
