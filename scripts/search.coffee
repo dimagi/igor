@@ -48,14 +48,12 @@ module.exports = (robot) ->
     messageId = +res.match[1]
 
     contextIds = _.map [-2, -1, 0, 1, 2], (increment) -> messageId + increment
-    console.log contextIds
     query =
       bool:
         must: [
           { match: { messageId: contextIds.join ' ' } }
         ]
 
-    console.log query
     client.search
       index: INDEX
       type: MESSAGE_TYPE
@@ -67,7 +65,6 @@ module.exports = (robot) ->
           res.send err.toString()
           return
         res.send formatResults resp
-        console.log resp
 
   robot.respond /search (all )?(.+)/i, (res) ->
     query = res.match[2]
