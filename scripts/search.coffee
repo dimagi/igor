@@ -8,6 +8,7 @@
 #
 # Commands:
 #   hubot search <all> <@mention> <#room> <query> - searches for a message
+#   hubot context <messageId> - gets messages that before and after the specified message
 #
 # Notes:
 #
@@ -37,10 +38,36 @@ module.exports = (robot) ->
           room: res.message.room
           channelId: res.message.rawMessage.channel
           userId: res.message.user.id
+          messageId: res.message.id.split('.')[0]  # Ensure the id is just a number
           date: new Date()
         , (err, resp) ->
           if err
-            res.send err
+            res.send err.toString()
+
+  robot.respond /context (.+)/i, (res) ->
+    messageId = +res.match[1]
+
+    contextIds = _.map [-2, -1, 0, 1, 2], (increment) -> messageId + increment
+    console.log contextIds
+    query =
+      bool:
+        must: [
+          { match: { messageId: contextIds.join ' ' } }
+        ]
+
+    console.log query
+    client.search
+      index: INDEX
+      type: MESSAGE_TYPE
+      body:
+        query: query
+        sort: { date: { order: 'asc' } }
+      , (err, resp) ->
+        if err
+          res.send err.toString()
+          return
+        res.send formatResults resp
+        console.log resp
 
   robot.respond /search (all )?(.+)/i, (res) ->
     query = res.match[2]
@@ -79,17 +106,24 @@ module.exports = (robot) ->
             message: {}
       , (err, resp) ->
         if err
-          res.send err
+          res.send err.toString()
           return
 
-        out = ''
-        _.each resp.hits.hits, (hit) ->
-          date = new Date hit._source.date
-          formattedDate = moment(date).format('MMM D YYYY, h:mm:ss a')
-          room = hit._source.room
+        res.send formatResults(resp)
 
-          out += "[##{room}][#{formattedDate}] #{hit._source.user}: #{hit.highlight.message[0]}\n"
+formatResults = (resp) ->
+  hits = resp.hits.hits
+  out = ''
 
-        if not out
-          out = 'Found nothing!'
-        res.send out
+  _.each resp.hits.hits, (hit) ->
+    date = new Date hit._source.date
+    formattedDate = moment(date).format('YYYY-M-D')
+    room = hit._source.room
+    messageId = hit._source.messageId or 'None'
+    message = hit.highlight?.message[0] or hit._source.message
+
+    out += "[#{messageId}][##{room}][#{formattedDate}] #{hit._source.user}: #{message}\n"
+
+  if not out
+    out = 'Found nothing!'
+  return out
