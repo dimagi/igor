@@ -88,8 +88,6 @@ module.exports = (robot) ->
 
     if mentions.users.length
       query.bool.must.push { match: { userId: mentions.users.join(' ') } }
-    else
-      query.bool.must.push { match: { userId: res.message.user.id } }
 
     client.search
       index: INDEX
