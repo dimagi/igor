@@ -47,7 +47,7 @@ module.exports = (robot) ->
   robot.respond /context (.+)/i, (res) ->
     messageId = +res.match[1]
 
-    contextIds = _.map [-2, -1, 0, 1, 2], (increment) -> messageId + increment
+    contextIds = _.map [-3, -2, -1, 0, 1, 2, 3], (increment) -> messageId + increment
     query =
       bool:
         must: [
