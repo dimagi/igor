@@ -38,7 +38,8 @@ module.exports = (robot) ->
           room: res.message.room
           channelId: res.message.rawMessage.channel
           userId: res.message.user.id
-          messageId: res.message.id.split('.')[0]  # Ensure the id is just a number
+          messageId: res.message.id.split('.')[0]  # Ensure the id is just a number. Seems to be gobally unique
+          roomMessageId: +res.message.id.split('.')[1]  # Id for the message in just the room
           date: new Date()
         , (err, resp) ->
           if err
