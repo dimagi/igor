@@ -1,4 +1,4 @@
-# Igor
+# Igor ![Igor](http://i.imgur.com/GDEhZbY.png)
 
 [![Build Status](https://travis-ci.org/dimagi/igor.svg?branch=master)](https://travis-ci.org/dimagi/igor)
 
@@ -41,7 +41,7 @@ Then you can interact with Igor by typing `igor help`.
 
 To connect to the slack client you'll need to specify the Slack token which can be found [here](https://dimagi.slack.com/services/B0CDDUNAH). Now to run hubot locally you can run:
 
-  % HUBOT_SLACK_TOKEN=<token> NODE_ENV=local ./bin/hubot --adapter slack
+    % HUBOT_SLACK_TOKEN=<token> NODE_ENV=local ./bin/hubot --adapter slack
 
 ### Running Tests
 
