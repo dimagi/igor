@@ -71,8 +71,9 @@ module.exports = (robot) ->
     mentions = utils.extractMentions res.message.rawText
     allRooms = res.match[1]?
 
-    # Ensure we do not include params in query
-    query = query.replace "/<[^ ]>/", ''
+    # Ensure we do not channels in the query
+    query = utils.removeChannelsFromQuery query
+    query = query.replace "/\b@[^ ]/", ' '
 
     query =
       bool:

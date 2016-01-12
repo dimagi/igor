@@ -24,3 +24,9 @@ exports.extractMentions = (text) ->
       results.users.push stripped.slice(1)
 
   results
+
+exports.removeChannelsFromQuery = (query) ->
+  return query.replace(/(^| )#[\w-]+/, '').trim()
+
+exports.removeUsersFromQuery = (query) ->
+  return query.replace(/(^| )@[\w-]+/, '').trim()
