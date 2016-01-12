@@ -1,4 +1,4 @@
-# Igor ![Igor](http://i.imgur.com/GDEhZbY.png)
+# ![Igor](http://i.imgur.com/GDEhZbY.png =100x) Igor
 
 [![Build Status](https://travis-ci.org/dimagi/igor.svg?branch=master)](https://travis-ci.org/dimagi/igor)
 
