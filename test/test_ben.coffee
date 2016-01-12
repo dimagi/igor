@@ -1,8 +1,7 @@
+HubotHelper = require('hubot-test-helper')
 expect = require('chai').expect
 co = require('co')
 
-
-HubotHelper = require 'hubot-test-helper'
 
 helper = new HubotHelper '../scripts/ben.coffee'
 
