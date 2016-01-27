@@ -76,11 +76,11 @@ module.exports = (robot) ->
     query = utils.removeChannelsFromQuery query
     query = query.replace "/\b@[^ ]/", ' '
 
+    musts = _.map query.split(' '), (word) -> { match: { message: word } }
+
     query =
       bool:
-        must: [
-          { match: { message: query } }
-        ]
+        must: musts
 
     if not allRooms
       if mentions.channels.length
