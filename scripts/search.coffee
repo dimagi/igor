@@ -74,6 +74,7 @@ module.exports = (robot) ->
 
     # Ensure we do not channels in the query
     query = utils.removeChannelsFromQuery query
+    query = utils.removeUsersFromQuery query
     query = query.replace "/\b@[^ ]/", ' '
 
     musts = _.map query.split(' '), (word) -> { match: { message: word } }
