@@ -16,7 +16,8 @@
 # Author:
 #   benrudolph
 
-CAPTAIN_URL = 'http://0.0.0.0:9999'
+config = require('config')
+CAPTAIN_URL = config.get 'Deploy.url'
 
 request = require('request')
 

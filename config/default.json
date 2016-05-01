@@ -1,5 +1,8 @@
 {
   "CommCareHQ": {
     "path": "/var/lib/mia/commcare-hq"
+  },
+  "Deploy": {
+    "url": "http://hqcaptain0.internal.commcarehq.org:9999"
   }
 }
