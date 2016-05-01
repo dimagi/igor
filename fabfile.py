@@ -2,28 +2,27 @@ from fabric.api import local, run, sudo, cd, env, task, execute
 from fabric.colors import blue, red, white, green
 
 # the user to use for the remote commands
-env.user = 'dimagi'
 # the servers where the commands are executed
-env.hosts = ['162.242.212.212']
-env.code_root = '/var/lib/mia/mia'
+env.hosts = ['hqcaptain0.internal.commcarehq.org']
+env.code_root = '/home/cchq/igor/src'
+env.sudo_user = 'cchq'
 
 
 def update_code():
     with cd(env.code_root):
-        run('git remote prune origin')
-        run('git pull origin master')
-        run("git clean -ffd")
+        sudo('git remote prune origin')
+        sudo('git pull origin master')
+        sudo("git clean -ffd")
 
 
 def install_deps():
     with cd(env.code_root):
-        run('npm install')
+        sudo('npm install')
 
 
 @task
 def restart_services():
-    sudo('supervisorctl restart mia', user='root')
-    sudo('supervisorctl restart mia-dimagi-all', user='root')
+    sudo('sudo supervisorctl restart igor-express')
 
 
 @task
