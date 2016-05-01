@@ -37,6 +37,7 @@ module.exports = (robot) ->
     request.post(CAPTAIN_URL + '/deploy/', formData: data, (err, response, body) ->
       if err || response.statusCode >= 400
         res.send "Failed to deploy deploy to #{env} on #{codeBranch} by #{user}"
+        res.send body
       else
         res.send "Successfully initiated deploy to #{env} on #{codeBranch} by #{user}"
     )
