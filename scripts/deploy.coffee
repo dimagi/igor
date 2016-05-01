@@ -8,8 +8,6 @@
 #
 # Commands:
 #   hubot deploy <env> - Initiates a deploy to <env>
-#   hubot deploy status - Lists statuses of all current deploys
-#   hubot deploy previous - Lists statuses of all previous deploys
 #
 # Notes:
 #
