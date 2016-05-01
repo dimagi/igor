@@ -16,7 +16,7 @@
 # Author:
 #   benrudolph
 
-CAPTAIN_URL = 'http://localhost:9999'
+CAPTAIN_URL = 'http://0.0.0.0:9999'
 
 request = require('request')
 
